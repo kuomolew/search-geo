@@ -16,24 +16,15 @@ $( () => {
     const HOVER_COLOR = "rgb(0, 255, 0)";
     const NOT_IN_DB_HOVER_COLOR = "rgb(0, 0, 0)";
     const CLICK_COLOR = "rgb(255, 0, 0)";
-    const HIGHLIGHT_COLOR = "rgb(0, 0, 255)";
+    const SEARCH_COLOR = "rgb(0, 0, 255)";
 
-    console.log(SET.length);
+    const MAX_COUNTRIES_TO_SHOW = 8;
     
     mapHover();
     mapCountryChoose();
+    resultsHover();
 
-    // $('#search').on('keyup', (e) => {
-    //     e.preventDefault();
-    //     removeHighLight();
-    //     if ( $('#search').val() ) {
-    //         let search = $('#search').val();
-    //         let type = $('#select').val();
-    //         request(search, type);
-    //     }
-    // });
-
-    $('#button').on('click', (e) => {
+    $('#search').on('keyup', (e) => {
         e.preventDefault();
         removeHighLight();
         if ( $('#search').val() ) {
@@ -43,6 +34,15 @@ $( () => {
         }
     });
 
+    // $('#button').on('click', (e) => {
+    //     e.preventDefault();
+    //     removeHighLight();
+    //     if ( $('#search').val() ) {
+    //         let search = $('#search').val();
+    //         let type = $('#select').val();
+    //         request(search, type);
+    //     }
+    // });
     
     function request(search, type) {
         let  api = `https://restcountries.eu/rest/v2/`;
@@ -63,6 +63,7 @@ $( () => {
                 //console.log(data);
                 if (data.status != 404) {
                     searchHighlight(data);
+                    results(data);
                 } else {
                     console.log('a4ibka');
                 }
@@ -71,6 +72,28 @@ $( () => {
             .catch(err => {
                 console.log("ERROR:", err.toString())
             });
+    }
+
+    function results(arr) {
+        $('#results').empty();
+        let counter = 0;
+        
+        for (item of arr) {
+            // console.log(item);
+            counter++;
+            let name = item.name;
+            let li = document.createElement('li');
+            let code = item.alpha3Code;
+            li.innerText = name;
+            // li.classList.add(`${code}`);
+            li.setAttribute(`code`, `${code}`);
+            console.log(li);
+            console.log(counter);
+            $('#results').append(li);
+            if (counter == MAX_COUNTRIES_TO_SHOW ) {
+                break;
+            }
+        }
     }
 
     /**
@@ -107,9 +130,9 @@ $( () => {
 
         // taking countries from the array one by one
         for (item of arr) {
-            console.log(item);
+            //console.log(item);
             let code = item.alpha3Code;
-            setCountryColor(code, HIGHLIGHT_COLOR);
+            setCountryColor(code, SEARCH_COLOR);
         }
     }
 
@@ -167,6 +190,25 @@ $( () => {
                 
         });
     };
+
+    function resultsHover() {
+        $('#results').on('mouseenter', 'li', (e) => {
+            console.log('Hover results on');
+            //check whether chosen path has class (is this region in SET)
+            if ( $(e.target).attr('code') ) {
+                let code = $(e.target).attr('code');
+                setCountryColor(code, HOVER_COLOR);
+            }
+        });
+
+        $('#results').on('mouseleave', 'li', (e) => {
+            console.log('Hover results off');
+            if ( $(e.target).attr('code') ) {
+                let code = $(e.target).attr('code');
+                setCountryColor(code, SEARCH_COLOR);
+            }
+        });
+    }
     
 });
 

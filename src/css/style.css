@@ -73,6 +73,7 @@ form {
     margin: 0 auto;
     margin-top: 50px;
     position: relative;
+    z-index: 2;
 }
 
 input {
@@ -160,14 +161,14 @@ button {
 }
 
 button:hover {
-    background-color: #2d2b34;
+    background-color: black;
     -webkit-box-shadow: 2px 2px 20px #151418;
     box-shadow: 2px 2px 20px #151418;
 }
 
 .map {
     margin-top: -270px;
-    margin-bottom: 200px;
+    height: 1010px;
 }
 
 .map svg {
@@ -176,4 +177,27 @@ button:hover {
 
 .map path {
     cursor: pointer;
+}
+
+#results {
+    position: absolute;
+    left: 5vw;
+    top: 45vh;
+    width: 11.5vw;
+    text-align: center;
+}
+
+#results li {
+    background-color: rgba(202, 199, 199, 0.3);
+    margin-bottom: 15px;
+    padding: 8px 0;
+    border-radius: 40%;
+    font-size: 1vw;
+    -webkit-box-shadow: 2px 2px 10px #cac7c7;
+    box-shadow: 2px 2px 10px #cac7c7;
+    cursor: pointer;
+}
+
+#results li:hover {
+    background-color: rgba(177, 173, 173, 0.3);
 }

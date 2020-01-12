@@ -10,6 +10,7 @@ form {
     margin: 0 auto;
     margin-top: 50px;
     position: relative;
+    z-index: 2;
 }
 input {
     width: 100%;
@@ -67,17 +68,35 @@ button {
     box-shadow: 2px 2px 10px $searchColor;
 }
 button:hover {
-    background-color: lighten($color: $searchColor, $amount: 10%);
+    background-color: darken($color: $searchColor, $amount: 10%);
     box-shadow: 2px 2px 20px $searchColor;
 }
 .map {
-    //background-color: lightpink;
     margin-top: -270px;
+    height: 1010px;
     svg {
         width: 100%;
     }
     path {
         cursor: pointer;
     }
-    margin-bottom: 200px;
+}
+#results {
+    position: absolute;
+    left: 5vw;
+    top: 45vh;
+    width: 11.5vw;
+    text-align: center;
+    li {
+        background-color: rgba(202, 199, 199, .3);
+        margin-bottom: 15px;
+        padding: 8px 0;
+        border-radius: 40%;
+        font-size: 1vw;
+        box-shadow: 2px 2px 10px rgb(202, 199, 199);
+        cursor: pointer;
+    }
+    li:hover {
+        background-color: darken($color: rgba(202, 199, 199, .3), $amount: 10%);
+    }
 }
