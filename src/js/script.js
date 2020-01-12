@@ -11,7 +11,7 @@ $( () => {
                  "GUY", "SUR", "GUF", "CHN", "IND", "SAU", "IRN", "MNG", "IDN", "PAK", "MMR", "AFG", "YEM", "THA", "TKM", "UZB",
                  "IRQ", "JPN", "VNM", "MYS", "OMN", "PHL", "LAO", "KGZ", "SYR", "KHM", "BGD", "NPL", "TJK", "KOR", "JOR", "ARE",
                  "LKA", "BTN", "TWN", "KWT", "TLS", "QAT", "LBN", "ISR", "BRN", "BHR", "SGP", "HKG", "MAC", "AUS", "PNG", "NZL",
-                 "FJI", "NCL"];
+                 "FJI", "NCL", "SLB"];
     const DEFAULT_COLOR = "rgb(185, 185, 185)";
     const HOVER_COLOR = "rgb(0, 255, 0)";
     const NOT_IN_DB_HOVER_COLOR = "rgb(0, 0, 0)";
