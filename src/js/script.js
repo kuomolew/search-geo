@@ -12,11 +12,12 @@ $( () => {
                  "IRQ", "JPN", "VNM", "MYS", "OMN", "PHL", "LAO", "KGZ", "SYR", "KHM", "BGD", "NPL", "TJK", "KOR", "JOR", "ARE",
                  "LKA", "BTN", "TWN", "KWT", "TLS", "QAT", "LBN", "ISR", "BRN", "BHR", "SGP", "HKG", "MAC", "AUS", "PNG", "NZL",
                  "FJI", "NCL", "SLB"];
-    const DEFAULT_COLOR = "rgb(185, 185, 185)";
-    const HOVER_COLOR = "rgb(0, 255, 0)";
-    const NOT_IN_DB_HOVER_COLOR = "rgb(0, 0, 0)";
+    const DEFAULT_COLOR = "rgb(150, 150, 150)";
+    const HOVER_COLOR = "rgb(100, 100, 100)";
+    const NOT_IN_DB_HOVER_COLOR = "rgb(0, 0, 255)";
     const CLICK_COLOR = "rgb(255, 0, 0)";
-    const SEARCH_COLOR = "rgb(0, 0, 255)";
+    const SEARCH_COLOR = "rgb(74, 128, 74)";
+    const ERROR_COLOR = "rgb(255, 214, 214)";
 
     const MAX_COUNTRIES_TO_SHOW = 8;
     
@@ -31,6 +32,8 @@ $( () => {
             let search = $('#search').val();
             let type = $('#select').val();
             request(search, type);
+        } else {
+            $('#results').empty();
         }
     });
 
@@ -66,6 +69,7 @@ $( () => {
                     results(data);
                 } else {
                     console.log('a4ibka');
+                    error();
                 }
                 
             })
@@ -77,7 +81,6 @@ $( () => {
     function results(arr) {
         $('#results').empty();
         let counter = 0;
-        
         for (item of arr) {
             // console.log(item);
             counter++;
@@ -85,14 +88,13 @@ $( () => {
             let li = document.createElement('li');
             let code = item.alpha3Code;
             li.innerText = name;
-            // li.classList.add(`${code}`);
             li.setAttribute(`code`, `${code}`);
-            console.log(li);
-            console.log(counter);
+            // console.log(li);
+            // console.log(counter);
             $('#results').append(li);
             if (counter == MAX_COUNTRIES_TO_SHOW ) {
                 break;
-            }
+            } 
         }
     }
 
@@ -142,6 +144,7 @@ $( () => {
     function mapCountryChoose() {
         $('svg').on('click', (e) => {
             removeHighLight();
+            $('#results').empty();
             //check whether chosen path has class (is this region in SET)
             if ( $(e.target).attr('class') ) {
                 //taking alpha3Code from class value
@@ -197,7 +200,7 @@ $( () => {
             //check whether chosen path has class (is this region in SET)
             if ( $(e.target).attr('code') ) {
                 let code = $(e.target).attr('code');
-                setCountryColor(code, HOVER_COLOR);
+                setCountryColor(code, CLICK_COLOR);
             }
         });
 
@@ -208,6 +211,16 @@ $( () => {
                 setCountryColor(code, SEARCH_COLOR);
             }
         });
+    }
+
+    function error() {
+        for (code of SET) {
+            setCountryColor(code, ERROR_COLOR);
+        }
+        $('#results').empty();
+        let p = document.createElement('li');
+        p.innerText = "Country was not found";
+        $('#results').append(p);
     }
     
 });
