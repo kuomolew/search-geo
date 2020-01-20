@@ -2,7 +2,7 @@ $( () => {
     
     const SET = ["UKR", "PRK", "RUS", "FRA", "ESP", "SWE", "NOR", "DEU", "FIN", "POL", "ITA", "GBR", "ROU", "BLR", "KAZ", "GRC",
                  "BGR", "ISL", "HUN", "PRT", "AUT", "CZE", "SRB", "IRL", "LTU", "LVA", "HRV", "BIH", "SVK", "EST", "DNK", "CHE",
-                 "NLD", "MDA", "BEL", "ARM", "ALB", "MKD", "TUR", "SVN", "MNE", "CYP", "AZE", "LUX", "SGS", "AND", "MLT", "LIE",
+                 "NLD", "MDA", "BEL", "ARM", "ALB", "MKD", "TUR", "SVN", "MNE", "CYP", "AZE", "LUX", "GEO", "AND", "MLT", "LIE",
                  "SMR", "MCO", "VAT", "GIB", "NGA", "ETH", "EGY", "COD", "ZAF", "TZA", "KEN", "SDN", "DZA", "UGA", "MAR", "MOZ",
                  "GHA", "AGO", "CIV", "MDG", "CMR", "NER", "BFA", "MLI", "MWI", "ZMB", "SOM", "SEN", "TCD", "ZWE", "RWA", "TUN",
                  "GIN", "BEN", "BDI", "SSD", "TGO", "ERI", "SLE", "LBY", "COG", "CAF", "LBR", "MRT", "NAM", "BWA", "LSO", "GMB",
@@ -151,13 +151,13 @@ $( () => {
     }
 
     function showCountry(obj) {
-        $('#country-full-info').show();
-        //console.log(obj);
-        smoothScroll();
+        $('#country-full-info').show(1000);
+        // console.log(obj);
         $('#name').text(obj.name);
         $('#flag').attr("src", `${obj.flag}`);
         $('#flag').attr("alt",`${obj.name} flag`);
         $('#nativeName').text(`${obj.nativeName}`);
+        smoothScroll(1000);
         $('#capital').html(`<p>Capital: </p><p>${obj.capital}</p>`);
         $('#population').html(`<p>Population: </p><p>${((obj.population).toFixed(0))
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} people</p>`);
@@ -211,8 +211,8 @@ $( () => {
                     addClass: (`currency`),
                     attr: {'code': `${item.symbol}`},
                 }).appendTo(`#${id} div`);
-                //requestCurrency(item.code) ;
-                showCurrencyRates({test: 2})
+                requestCurrency(item.code) ;
+                //showCurrencyRates({test: 2})
                 if (counter == 1 ) {
                     break;
                 }
@@ -305,7 +305,7 @@ $( () => {
                 requestCountry(code);
                 
             } else {
-                $('#country-full-info').hide(1500);
+                $('#country-full-info').hide(500);
             }
             //console.log(`${e.target.id}"`);
         });
@@ -390,9 +390,9 @@ $( () => {
         $('#results').append(p);
     }
 
-    function smoothScroll() {
+    function smoothScroll(time) {
         let top = $('#name').offset().top;
-        $('body,html').animate({scrollTop: top}, 1500);
+        $('body,html').animate({scrollTop: top}, time);
     }
     
 });
