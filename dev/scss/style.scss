@@ -3,6 +3,7 @@
 @import '_var';
 body {
     font-family: 'Open Sans';
+    overflow-y: scroll;
 }
 form {
     width: 50%;
@@ -74,6 +75,7 @@ button:hover {
 .map {
     margin-top: -290px;
     height: 1010px;
+    overflow: hidden;
     svg {
         width: 100%;
     }
@@ -96,8 +98,68 @@ button:hover {
         box-shadow: 2px 2px 10px rgb(202, 199, 199);
         cursor: pointer;
     }
+    p {
+        margin-top: 20px;
+    }
     li:hover,
     p:hover {
         background-color: darken($color: rgba(202, 199, 199, .3), $amount: 10%);
+    }
+}
+
+#country-full-info {
+    font-size: 1.3rem;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+    z-index: 2;
+    overflow: hidden;
+    h1 {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    h2 {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .flag {
+        text-align: center;
+        margin: 0 auto;
+        img {
+            max-height: 150px;
+            border: 1px solid $searchColor;
+        }
+    }
+    .info-wrap {
+        width: 60%;
+        margin: 0 auto;
+        padding: 0 10%;
+        box-sizing: border-box;
+        @media screen and (max-width: 1350px)  {
+            width: 80%;
+        }
+        @media screen and (max-width: 1350px)  {
+            width: 95%;
+        }
+    }
+    .info {
+        border-bottom: 1px solid black;
+        margin: 0 auto;
+        display: flex;
+        >p:first-child {
+            width: 40%;
+            padding: 20px;
+            padding: 20px 0 5px 10%;
+        }
+        >div,
+        >p:last-child {
+            width: 60%;
+            padding: 20px 0 5px 0;
+        }
+
     }
 }

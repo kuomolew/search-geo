@@ -20,34 +20,44 @@ $( () => {
     const ERROR_COLOR = "rgb(255, 214, 214)";
 
     const MAX_COUNTRIES_TO_SHOW = 8;
-    
-    mapHover();
-    mapCountryChoose();
-    resultsHover();
 
-    $('#search').on('keyup', (e) => {
-        e.preventDefault();
-        removeHighLight();
-        if ( $('#search').val() ) {
-            let search = $('#search').val();
-            let type = $('#select').val();
-            request(search, type);
-        } else {
-            $('#results').empty();
-        }
-    });
-
-    // $('#button').on('click', (e) => {
-    //     e.preventDefault();
-    //     removeHighLight();
-    //     if ( $('#search').val() ) {
-    //         let search = $('#search').val();
-    //         let type = $('#select').val();
-    //         request(search, type);
-    //     }
-    // });
+    let borderCountryName;
     
-    function request(search, type) {
+    init();
+
+    function init() {
+        mapHover();
+        mapCountryChoose();
+        resultsHover();
+        resultsClick();
+        new WOW().init();
+        $('#country-full-info').hide();
+    
+        $('#search').on('keyup', (e) => {
+            e.preventDefault();
+            removeHighLight();
+            if ( $('#search').val() ) {
+                let search = $('#search').val();
+                let type = $('#select').val();
+                requestList(search, type);
+            } else {
+                $('#results').empty();
+                $('#country-full-info').hide();
+            }
+        });
+    
+        // $('#button').on('click', (e) => {
+        //     e.preventDefault();
+        //     removeHighLight();
+        //     if ( $('#search').val() ) {
+        //         let search = $('#search').val();
+        //         let type = $('#select').val();
+        //         requestList(search, type);
+        //     }
+        // });
+    }
+    
+    function requestList(search, type) {
         let  api = `https://restcountries.eu/rest/v2/`;
         if (type == 'name') {
             api = `${api}name/${search}`;
@@ -56,19 +66,16 @@ $( () => {
         } else {
             console.log('Request type error!');
         }
-        console.log(api);
 
         fetch(api)
             .then(response => {
                 return response.json();
             })
             .then(data => {
-                //console.log(data);
                 if (data.status != 404) {
                     searchHighlight(data);
                     results(data);
                 } else {
-                    console.log('a4ibka');
                     error();
                 }
                 
@@ -78,25 +85,169 @@ $( () => {
             });
     }
 
-    function results(arr) {
+    function requestCountry(alpha3Code) {
+        let  api = `https://restcountries.eu/rest/v2/alpha/${alpha3Code}`;
+        fetch(api)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.status != 404) {
+                    showCountry(data);
+                } else {
+                    error();
+                }
+                
+            })
+            .catch(err => {
+                console.log("ERROR:", err.toString())
+            });
+    }
+
+    function getNameByCode(item) {
+        let  api = `https://restcountries.eu/rest/v2/alpha/${item.innerText}`;
+        fetch(api)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.status != 404) {
+                    item.innerText = data.name;
+                } else {
+                    error();
+                }
+                
+            })
+            .catch(err => {
+                console.log("ERROR:", err.toString())
+            });
+    }
+
+    function requestCurrency(code) {
+        let api = `https://free.currconv.com/api/v7/convert?q=USD_${code}&compact=ultra&apiKey=ee9093278ff1b58f19d4`;
+        fetch(api)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    console.log(data);
+                    showCurrencyRates(data);
+                } else {
+                    console.log('error');
+                }
+                
+            })
+            .catch(err => {
+                console.log("ERROR:", err.toString())
+            });
+    }
+
+    function showCurrencyRates(obj) {
+        for (item in obj) {
+            let name = $('.currency').attr('code');
+            $('.currency').append(`<br> $100 rate ${+(obj[item]*100).toFixed(2)} ${name}`);
+        }
+    }
+
+    function showCountry(obj) {
+        $('#country-full-info').show();
+        //console.log(obj);
+        smoothScroll();
+        $('#name').text(obj.name);
+        $('#flag').attr("src", `${obj.flag}`);
+        $('#flag').attr("alt",`${obj.name} flag`);
+        $('#nativeName').text(`${obj.nativeName}`);
+        $('#capital').html(`<p>Capital: </p><p>${obj.capital}</p>`);
+        $('#population').html(`<p>Population: </p><p>${((obj.population).toFixed(0))
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} people</p>`);
+        $('#area').html(`<p>Area: </p><p>${((obj.area).toFixed(0))
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} sq km</p>`);
+        $('#region').html(`<p>Region: </p><p>${obj.region}, ${obj.subregion}</p>`);
+        
+        showCountryArrayInfo('altSpellings', 'Alternative Spellings:', obj.altSpellings);
+        showCountryArrayInfo('topLevelDomain', 'Top Level Domains:', obj.topLevelDomain);
+        showCountryArrayInfo('callingCodes', 'Calling Codes:', obj.callingCodes);
+        showCountryObjectInfo('languages', 'Languages:', obj.languages, false);
+        showCountryObjectInfo('currencies', 'Currencies:', obj.currencies, true);
+
+        // Show borders
+        showCountryArrayInfo('borders', 'Borders:', obj.borders);
+        for (item of $('#borders p') ) {
+            if ( SET.includes(item.innerText)) {
+                getNameByCode(item);
+            }
+        }
+        
+    }
+
+
+    function showCountryArrayInfo(id, text, arr) {
+        $(`#${id}`).empty();
+        $('<p>', {
+            text: text,
+        }).appendTo(`#${id}`);
+        $('<div>').appendTo(`#${id}`);
+        for (item of arr) {
+            $('<p>', {
+                text: `${item}`,
+            }).appendTo(`#${id} div`);
+        }
+    }
+
+    function showCountryObjectInfo(id, text, arr, curr) {
+        let counter = 0;
+        $(`#${id}`).empty();
+        $('<p>', {
+            text: text,
+        }).appendTo(`#${id}`);
+        $('<div>').appendTo(`#${id}`);
+        
+        for (item of arr) {
+            if (curr) {
+                counter++;
+                $('<p>', {
+                    text: `${item.symbol}, ${item.name}`,
+                    addClass: (`currency`),
+                    attr: {'code': `${item.symbol}`},
+                }).appendTo(`#${id} div`);
+                //requestCurrency(item.code) ;
+                showCurrencyRates({test: 2})
+                if (counter == 1 ) {
+                    break;
+                }
+            } else {
+                $('<p>', {
+                    text: `${item.name}`,
+                }).appendTo(`#${id} div`);
+            }
+            
+        }
+    }
+
+    async function results(arr) {
         $('#results').empty();
         let counter = 0;
         for (item of arr) {
-            // console.log(item);
             counter++;
             let name = item.name;
             let li = document.createElement('li');
             let code = item.alpha3Code;
             li.innerText = name;
+            li.classList.add('slideInLeft');
+            li.classList.add('wow');
             li.setAttribute(`code`, `${code}`);
-            // console.log(li);
-            // console.log(counter);
             $('#results').append(li);
+            await sleep(15);
             if (counter == MAX_COUNTRIES_TO_SHOW ) {
-                break;
-            } 
+               break;
+            }
         }
     }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
     /**
      * Set color of area on the map
@@ -149,11 +300,14 @@ $( () => {
             if ( $(e.target).attr('class') ) {
                 //taking alpha3Code from class value
                 let code = $(e.target).attr('class');
-                console.log(code);
                 //setting color for each path with code equal to chosen one to CLICK_COLOR
                 setCountryColor(code, CLICK_COLOR);
+                requestCountry(code);
+                
+            } else {
+                $('#country-full-info').hide(1500);
             }
-            console.log(`${e.target.id}"`);
+            //console.log(`${e.target.id}"`);
         });
     }
 
@@ -196,7 +350,7 @@ $( () => {
 
     function resultsHover() {
         $('#results').on('mouseenter', 'li', (e) => {
-            console.log('Hover results on');
+            //console.log('Hover results on');
             //check whether chosen path has class (is this region in SET)
             if ( $(e.target).attr('code') ) {
                 let code = $(e.target).attr('code');
@@ -205,10 +359,22 @@ $( () => {
         });
 
         $('#results').on('mouseleave', 'li', (e) => {
-            console.log('Hover results off');
+            //console.log('Hover results off');
             if ( $(e.target).attr('code') ) {
                 let code = $(e.target).attr('code');
                 setCountryColor(code, SEARCH_COLOR);
+            }
+        });
+    }
+
+    function resultsClick() {
+        $('#results').on('click', 'li', (e) => {
+            if ( $(e.target).attr('code') ) {
+                $('#results').empty();
+                removeHighLight();
+                let code = $(e.target).attr('code');
+                setCountryColor(code, CLICK_COLOR);
+                requestCountry(code);
             }
         });
     }
@@ -217,10 +383,16 @@ $( () => {
         for (code of SET) {
             setCountryColor(code, ERROR_COLOR);
         }
+        $('#country-full-info').hide();
         $('#results').empty();
         let p = document.createElement('li');
         p.innerText = "Country was not found";
         $('#results').append(p);
+    }
+
+    function smoothScroll() {
+        let top = $('#name').offset().top;
+        $('body,html').animate({scrollTop: top}, 1500);
     }
     
 });
