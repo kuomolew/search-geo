@@ -10,12 +10,14 @@
     
 </head>
 <body>
-    @@include('block/search.html')
+    @@include('common/header.html')
+    @@include('map/search.html')
     <div class="map">
-        @@include('block/map.html')
-        @@include('block/results.html')
+        @@include('map/map.html')
+        @@include('map/results.html')
     </div>
-    @@include('block/info.html')
+    @@include('map/info.html')
+    
     <script src="plugins/jquery-3.4.1.min.js"></script>
     <script src="plugins/wow.min.js"></script>
     <script src="js/interactive-map.js"></script>

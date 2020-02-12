@@ -605,35 +605,10 @@ $( () => {
         
     }
 
-    
-//     let country = 'UKR'
-//     let path = $(`.${country}`);
-//     let biggest = 0;
-    
-//     if (path.length > 1) {
-//         //console.log(path);
-//         for (let i = 0; i < path.length; i++) {
-//             $(path[biggest]).attr('d').length < $(path[i]).attr('d').length ? biggest = i : biggest;
-//             //console.log( `${i} - ${$(path[i]).attr('id')}` );
-//         }
-//     }
-//    // console.log(`biggest -  ${biggest}` );
-//     let width = path[biggest].getBBox().width;
-//     let height = path[biggest].getBBox().height;
-//     console.log( $(path[0]).attr('d') )
-//     let top = $(path[biggest]).offset().top;
-//     let left = $(path[biggest]).offset().left;
-//     $('<img>', {
-//         width: '20px',
-//         height: "20px"
-//     })
-//     .attr("src", "img/pin2.svg")
-//     .attr("id", `pin-${country}`)
-//     .addClass('img-pin')
-//     .css("position", "absolute")
-//     .css("top", `${top + height/2 - 10}px`)
-//     .css("left", `${left + width/2 - 10}px`)
-//     .appendTo('.map');
+    $( "#nav-trigger" ).click(function(){ 
+        $( "#header-menu" ).slideToggle();
+        $( "#nav-trigger" ).toggleClass('nav-trigger-active');
+    });
 
 
     

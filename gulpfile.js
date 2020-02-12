@@ -53,7 +53,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./dev/scss/*.scss', gulp.series('compile', 'autoprefix', 'beautify'));
+  gulp.watch('./dev/scss/**/*.scss', gulp.series('compile', 'autoprefix', 'beautify'));
 	gulp.watch('./dev/html/**/*.html', gulp.parallel('html'));
 });
 

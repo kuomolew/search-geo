@@ -1,6 +1,8 @@
 $( () => {
     
-    
+    const MAX_ROUNDS = 5;
+    const VARIANTS_AMOUNT = 3;
+
     new Vue ({
         el: '#app',
         data() {
@@ -11,15 +13,17 @@ $( () => {
                 isFlagGame: true,
                 isCapitalGame: false,
                 area: 'europe',
-                maxRounds: 5,
+                maxRounds: MAX_ROUNDS,
                 currentRound: 0,
                 currentPersent: 0,
-                variantsAmount: 3,
+                variantsAmount: VARIANTS_AMOUNT,
                 variants: [],
                 chosen: -1,
                 data: [],
                 areFlagsOpen: false,
                 answers: 0,
+                answersPersent: 0,
+                wrongAnswersPersent: 0,
             }
         },
         methods: {
@@ -37,6 +41,8 @@ $( () => {
                 this.data = [];
                 this.areFlagsOpen = false;
                 this.answers = 0;
+                this.answersPersent = 0;
+                this.wrongAnswersPersent = 0;
             },
             capitalMode() {
                 this.gameMode = 'capital';
@@ -61,8 +67,6 @@ $( () => {
             startGame() {
                 this.gamePlaying = true;
                 this.answers = 0;
-                //console.log(this.area);
-                //this.currentPersentCalc();
                 this.requestAreaList(this.area);
             },
             requestAreaList(area) {
@@ -75,7 +79,6 @@ $( () => {
                     .then(data => {
                         if (data.status != 404) {
                             this.data = data;
-                            //console.log(this.data);
                             this.setCountries();
                             
                         } else {
@@ -109,7 +112,6 @@ $( () => {
                 
             },
             printFlag() {
-                console.log(`currRound - ${this.currentRound}, maxRounds - ${this.maxRounds}, corrAnswers - ${this.answers}, gameScore - ${this.gameScore}`);
                 if (this.variants.length == this.variantsAmount) {
                     return this.data[this.chosen].flag;
                 }
@@ -118,11 +120,12 @@ $( () => {
                 
                 if (this.areFlagsOpen == false 
                     && e.target.innerText == this.data[this.chosen].name) {
-                    // console.log('Yees');
                     this.answers++;
+                    
                 }
                 if (this.currentRound >= this.maxRounds) {
                     this.gameScore = true;
+                    this.totalScoreCalc()
                 }
                 this.areFlagsOpen = true;
             },
@@ -130,6 +133,12 @@ $( () => {
                 this.currentPersent = this.currentRound * 100 / this.maxRounds;
                 this.currentPersent += '%';
             },
+            totalScoreCalc() {
+                this.answersPersent = this.answers * 100 / this.maxRounds;
+                this.wrongAnswersPersent = 100 - this.answersPersent;
+                this.answersPersent += '%';
+                this.wrongAnswersPersent += '%';
+            }
 
             
         },
@@ -141,6 +150,9 @@ $( () => {
         }
     });
 
-
+    $( "#nav-trigger" ).click(function(){ 
+        $( "#header-menu" ).slideToggle();
+        $( "#nav-trigger" ).toggleClass('nav-trigger-active');
+    });
 
 });

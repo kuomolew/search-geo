@@ -8,13 +8,7 @@
             >
             @@include('../../../src/img/flag.svg')
         </div>
-        <!-- <div 
-            @click="capitalMode" 
-            :class="{chosen: isCapitalGame}" 
-            class="col-3 col-md-2 align-self-center text-center"
-            >
-            
-        </div> -->
+        
         
     </div>
     <div class="row mt-5">
@@ -32,14 +26,16 @@
                 <option value="asia">Asia</option>
                 <option value="oceania">Oceania</option>
             </select>
-
-            <!-- <p>{{area}}</p> -->
         </form>
         <br>
         <br>
         <br>
     </div>
     <div class="row mt-3">
-        <button type="button" @click="startGame" class="btn btn-success">Start Game</button>
+        <button type="button" 
+                @click="startGame" 
+                class="btn btn-success"
+                >Start Game
+        </button>
     </div>
 </template>
