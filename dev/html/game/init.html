@@ -8,6 +8,14 @@
             >
             @@include('../../../src/img/flag.svg')
         </div>
+
+        <div 
+            @click="capitalMode" 
+            :class="{chosen: isCapitalGame}" 
+            class="col-3 col-md-2 align-self-center text-center"
+            >
+            @@include('../../../src/img/capital.svg')
+        </div>
         
         
     </div>

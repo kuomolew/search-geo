@@ -109,11 +109,20 @@ $( () => {
                 max = this.variants.length - 1;
                 rand = Math.floor( min + Math.random() * (max + 1 - min) );
                 this.chosen = this.variants[rand];
+                if (this.isCapitalGame) {
+                    this.askQuestion();
+                }
                 
             },
             printFlag() {
                 if (this.variants.length == this.variantsAmount) {
                     return this.data[this.chosen].flag;
+                }
+            },
+            askQuestion() {
+                
+                if (this.variants.length == this.variantsAmount) {
+                    return this.data[this.chosen].capital;
                 }
             },
             playersAnswer(e) {
