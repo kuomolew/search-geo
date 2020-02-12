@@ -1,0 +1,39 @@
+<template v-if="gamePlaying">
+    
+    <div class="row mt-5 mb-3 justify-content-center">
+        <div class="col-3 col-md-3 align-self-center text-center">
+            <img :src="printFlag()" 
+            style="border: 1px solid gray; height: 100px; text-align: center;" 
+            alt="">
+        </div>
+    </div>
+
+    
+    <div class="row mt-5 mb-3 justify-content-around" >
+        <div class="card border-dark mb-3" 
+            style="width: 15vw; min-height: 10vw;;" 
+            v-for="(variant, i) in variants"
+            
+            >
+            <div class="card-header text-center"
+                @click="playersAnswer"
+                style="cursor: pointer;" 
+            >{{ data[variant].name }}</div>
+            <div class="card-body text-dark text-center justify-content-center">
+                <img v-if="!areFlagsOpen" 
+                    style="height: 5vw;" 
+                    src="img/question.svg" 
+                    alt="">
+                
+                <img v-if="areFlagsOpen" 
+                    style="width: 100%; border: 1px solid gray"
+                    :src="data[variant].flag" 
+                    alt="">
+                
+            <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+            </div>
+        </div>
+    </div>
+    
+
+</template>

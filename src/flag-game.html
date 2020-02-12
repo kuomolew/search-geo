@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title>Flag Game</title>
+    <script src="plugins/vue.js"></script>
+</head>
+<body class="game">
+    <div id="app" class="container">
+        <template v-if="!gamePlaying">
+
+    <div class="row justify-content-center mt-5 choose">
+        <div 
+            @click="flagMode" 
+            :class="{chosen: isFlagGame}" 
+            class="col-3 col-md-2 align-self-center text-center"
+            >
+            <?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<g>
+	<g>
+		<path d="M301,90V60c0-33.084-26.916-60-60-60H90H75H0v512h90V302h91v30c0,33.084,26.916,60,60,60h271V90H301z M60,482H30V30h30
+			V482z M241,362c-16.542,0-30-13.458-30-30v-30h30c16.542,0,30,13.458,30,30S257.542,362,241,362z M271,280.072
+			c-8.833-5.123-19.075-8.072-30-8.072H90V30h151c16.542,0,30,13.458,30,30V280.072z M482,362H292.928
+			c5.123-8.833,8.072-19.075,8.072-30V120h181V362z"/>
+	</g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
+
+        </div>
+        <!-- <div 
+            @click="capitalMode" 
+            :class="{chosen: isCapitalGame}" 
+            class="col-3 col-md-2 align-self-center text-center"
+            >
+            
+        </div> -->
+        
+    </div>
+    <div class="row mt-5">
+        <div class="col align-self-center text-center">
+            <h1 v-if="gameMode == 'flag'">Flag Mode Game</h1>
+            <h1 v-else-if="gameMode == 'capital'">Capital Mode Game</h1>
+        </div>
+    </div>
+    <div class="row">
+        <form>
+            <select class="custom-select" v-model="area">
+                <option value="europe" selected>Europe</option>
+                <option value="africa">Africa</option>
+                <option value="americas">Americas</option>
+                <option value="asia">Asia</option>
+                <option value="oceania">Oceania</option>
+            </select>
+
+            <!-- <p>{{area}}</p> -->
+        </form>
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="row mt-3">
+        <button type="button" @click="startGame" class="btn btn-success">Start Game</button>
+    </div>
+</template>
+        <template v-if="gamePlaying">
+    
+    <div class="row mt-5 mb-3">
+        <div class="col-12 text-center">
+            <h2>Round {{ currentRound }} of {{ maxRounds }}</h2>
+        </div>
+    </div>
+    
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" 
+            :style="{width: currentPersent}" 
+            :aria-valuenow="currentPersent" 
+            aria-valuemin="0" aria-valuemax="100"
+            >{{ currentPersent }}
+        </div>
+    </div>
+    <template v-if="!gameScore">
+        <div class="row mt-3">
+            <button type="button" 
+            v-if="areFlagsOpen"
+            v-if="!gameScore"
+            @click="setCountries" 
+            class="btn btn-success"
+            >Next Round</button>
+        </div>
+    </template>
+
+    <template v-if="gameScore">
+        <div class="row mt-3">
+            <h2 class="text-center">You Guessed {{ answers }} Flags out of {{ maxRounds }}</button>
+        </div>
+        <div class="row mt-3">
+            <button type="button" 
+            class="btn btn-success"
+            @click="reset">New Game</button>
+        </div>
+    </template>
+
+</template>
+        <template v-if="gamePlaying">
+    
+    <div class="row mt-5 mb-3 justify-content-center">
+        <div class="col-3 col-md-3 align-self-center text-center">
+            <img :src="printFlag()" 
+            style="border: 1px solid gray; height: 100px; text-align: center;" 
+            alt="">
+        </div>
+    </div>
+
+    
+    <div class="row mt-5 mb-3 justify-content-around" >
+        <div class="card border-dark mb-3" 
+            style="width: 15vw; min-height: 10vw;;" 
+            v-for="(variant, i) in variants"
+            
+            >
+            <div class="card-header text-center"
+                @click="playersAnswer"
+                style="cursor: pointer;" 
+            >{{ data[variant].name }}</div>
+            <div class="card-body text-dark text-center justify-content-center">
+                <img v-if="!areFlagsOpen" 
+                    style="height: 5vw;" 
+                    src="img/question.svg" 
+                    alt="">
+                
+                <img v-if="areFlagsOpen" 
+                    style="width: 100%; border: 1px solid gray"
+                    :src="data[variant].flag" 
+                    alt="">
+                
+            <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+            </div>
+        </div>
+    </div>
+    
+
+</template>
+
+    </div>
+    <script src="plugins/jquery-3.4.1.min.js"></script>
+    <script src="plugins/bootstrap.bundle.min.js"></script>
+    <script src="plugins/wow.min.js"></script>
+    <script src="js/flag-game.js"></script>
+</body>
+</html>

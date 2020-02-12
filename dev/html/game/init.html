@@ -1,0 +1,45 @@
+<template v-if="!gamePlaying">
+
+    <div class="row justify-content-center mt-5 choose">
+        <div 
+            @click="flagMode" 
+            :class="{chosen: isFlagGame}" 
+            class="col-3 col-md-2 align-self-center text-center"
+            >
+            @@include('../../../src/img/flag.svg')
+        </div>
+        <!-- <div 
+            @click="capitalMode" 
+            :class="{chosen: isCapitalGame}" 
+            class="col-3 col-md-2 align-self-center text-center"
+            >
+            
+        </div> -->
+        
+    </div>
+    <div class="row mt-5">
+        <div class="col align-self-center text-center">
+            <h1 v-if="gameMode == 'flag'">Flag Mode Game</h1>
+            <h1 v-else-if="gameMode == 'capital'">Capital Mode Game</h1>
+        </div>
+    </div>
+    <div class="row">
+        <form>
+            <select class="custom-select" v-model="area">
+                <option value="europe" selected>Europe</option>
+                <option value="africa">Africa</option>
+                <option value="americas">Americas</option>
+                <option value="asia">Asia</option>
+                <option value="oceania">Oceania</option>
+            </select>
+
+            <!-- <p>{{area}}</p> -->
+        </form>
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="row mt-3">
+        <button type="button" @click="startGame" class="btn btn-success">Start Game</button>
+    </div>
+</template>
