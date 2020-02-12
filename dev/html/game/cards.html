@@ -1,20 +1,36 @@
 <template v-if="gamePlaying">
 
     <template v-if="gameScore">
-        <div class="row mt-3">
-            <div class="col text-center">
-                <h1 class="font-weight-bold">
-                    You Guessed {{ answers }} Flags out of {{ maxRounds }}
-                </h1>
+        <template v-if="isFlagGame">
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <h1 class="font-weight-bold">
+                        You Guessed {{ answers }} Flags out of {{ maxRounds }}
+                    </h1>
+                </div>
             </div>
-        </div>
+        </template>
+        <template v-if="isCapitalGame">
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <h1 class="font-weight-bold">
+                        You Guessed {{ answers }} Capitals out of {{ maxRounds }}
+                    </h1>
+                </div>
+            </div>
+        </template>
     </template>
     
     <div class="row mt-5 mb-3 justify-content-center">
         <div class="col-3 col-md-3 align-self-center text-center">
-            <img :src="printFlag()" 
-            style="border: 1px solid gray; height: 100px; text-align: center;" 
-            alt="">
+            <img :src="printFlag()"
+                v-if="isFlagGame" 
+                style="border: 1px solid gray; height: 100px; text-align: center;" 
+                alt="">
+            
+            <h2 v-if="isCapitalGame" >
+                {{ askQuestion() }}
+            </h2>
         </div>
     </div>
 
@@ -33,11 +49,16 @@
                     style="height: 5vw;" 
                     src="img/question.svg" 
                     alt="">
-                
-                <img v-if="areFlagsOpen" 
-                    style="width: 100%; border: 1px solid gray"
-                    :src="data[variant].flag" 
-                    alt="">
+                <template v-if="isFlagGame">
+                    <img v-if="areFlagsOpen" 
+                        style="width: 100%; border: 1px solid gray"
+                        :src="data[variant].flag" 
+                        alt="">
+                </template>
+
+                <template v-if="isCapitalGame">
+                    <h3 v-if="areFlagsOpen" >{{ data[variant].capital }}</h3>
+                </template>
                 
             </div>
         </div>
