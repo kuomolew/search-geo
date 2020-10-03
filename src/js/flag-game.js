@@ -1,5 +1,5 @@
 $(() => {
-  const MAX_ROUNDS = 6;
+  const MAX_ROUNDS = 4;
   const VARIANTS_AMOUNT = 3;
 
   new Vue({
